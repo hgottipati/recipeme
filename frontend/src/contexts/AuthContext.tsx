@@ -7,6 +7,8 @@ interface User {
   id: string
   email: string
   name: string
+  avatar?: string
+  provider: 'local' | 'google' | 'facebook'
   preferences: {
     measurementUnits: 'metric' | 'imperial' | 'mixed'
     dietaryRestrictions: string[]
@@ -40,6 +42,7 @@ interface AuthContextType {
   token: string | null
   login: (email: string, password: string) => Promise<void>
   register: (name: string, email: string, password: string) => Promise<void>
+  handleOAuthLogin: (token: string) => Promise<void>
   logout: () => void
   updatePreferences: (preferences: Partial<User['preferences']>) => Promise<void>
   addEquipment: (equipment: Omit<User['equipment'][0], '_id'>) => Promise<void>
@@ -78,6 +81,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setLoading(false)
     }
   }, [])
+
+  // Method to handle OAuth login
+  const handleOAuthLogin = async (token: string) => {
+    try {
+      setToken(token)
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      await fetchUserProfile()
+    } catch (error: any) {
+      throw new Error(error.response?.data?.error || 'OAuth login failed')
+    }
+  }
 
   const fetchUserProfile = async () => {
     try {
@@ -161,6 +175,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     token,
     login,
     register,
+    handleOAuthLogin,
     logout,
     updatePreferences,
     addEquipment,

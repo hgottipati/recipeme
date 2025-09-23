@@ -11,13 +11,14 @@ import {
   Save,
   Clock,
   Users,
-  Sparkles
+  Sparkles,
+  LogOut
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import toast from 'react-hot-toast'
 
 export default function ProfilePage() {
-  const { user, updatePreferences, addEquipment, removeEquipment } = useAuth()
+  const { user, updatePreferences, addEquipment, removeEquipment, logout } = useAuth()
   const [activeTab, setActiveTab] = useState<'preferences' | 'equipment'>('preferences')
   const [preferences, setPreferences] = useState(user?.preferences || {})
   const [newEquipment, setNewEquipment] = useState({
@@ -74,6 +75,11 @@ export default function ProfilePage() {
     }
   }
 
+  const handleLogout = () => {
+    logout()
+    toast.success('Logged out successfully!')
+  }
+
   if (!user) {
     return <div>Loading...</div>
   }
@@ -83,14 +89,36 @@ export default function ProfilePage() {
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center space-x-4">
-            <div className="bg-primary-100 rounded-full p-3">
-              <User className="h-8 w-8 text-primary-600" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="bg-primary-100 rounded-full p-3">
+                {user.avatar ? (
+                  <img 
+                    src={user.avatar} 
+                    alt={user.name}
+                    className="h-8 w-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <User className="h-8 w-8 text-primary-600" />
+                )}
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+                <p className="text-gray-600">{user.email}</p>
+                {user.provider !== 'local' && (
+                  <p className="text-xs text-gray-500 capitalize">
+                    Signed in with {user.provider}
+                  </p>
+                )}
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
-              <p className="text-gray-600">{user.email}</p>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </div>
