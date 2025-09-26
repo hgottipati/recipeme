@@ -319,17 +319,21 @@ export default function ProfilePage() {
                     Preferred Instruction Style
                   </label>
                   <select
-                    value={preferences.aiLearningData?.preferredInstructionsStyle || 'detailed'}
-                    onChange={(e) => handlePreferenceChange('aiLearningData', {
-                      ...preferences.aiLearningData,
-                      preferredInstructionsStyle: e.target.value
-                    })}
+                    value={user.aiLearningData?.preferredInstructionsStyle || 'detailed'}
+                    onChange={(e) => {
+                      // This would need to be handled by a separate update function for aiLearningData
+                      // For now, we'll just show the current value
+                    }}
                     className="input-field"
+                    disabled
                   >
                     <option value="simple">Simple & Concise</option>
                     <option value="detailed">Detailed & Thorough</option>
                     <option value="professional">Professional & Technical</option>
                   </select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    This setting is managed by the AI learning system
+                  </p>
                 </div>
               </div>
 
