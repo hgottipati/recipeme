@@ -60,6 +60,15 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Root health check for Render
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'RecipeAI Backend is running',
+    timestamp: new Date().toISOString() 
+  });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -76,9 +85,10 @@ app.use('*', (req, res) => {
 
 // Connect to database and start server
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📱 Recipe AI Backend is ready!`);
+    console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
   });
 }).catch(err => {
   console.error('Failed to connect to database:', err);
