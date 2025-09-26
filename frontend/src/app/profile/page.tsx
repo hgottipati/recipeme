@@ -20,7 +20,15 @@ import toast from 'react-hot-toast'
 export default function ProfilePage() {
   const { user, updatePreferences, addEquipment, removeEquipment, logout } = useAuth()
   const [activeTab, setActiveTab] = useState<'preferences' | 'equipment'>('preferences')
-  const [preferences, setPreferences] = useState(user?.preferences || {})
+  const [preferences, setPreferences] = useState(user?.preferences || {
+    measurementUnits: 'imperial' as const,
+    dietaryRestrictions: [],
+    preferredCookingMethods: [],
+    skillLevel: 'intermediate' as const,
+    preferredIngredients: [],
+    dislikedIngredients: [],
+    commonSubstitutions: {}
+  })
   const [newEquipment, setNewEquipment] = useState({
     name: '',
     type: 'appliance',
@@ -30,7 +38,15 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (user) {
-      setPreferences(user.preferences)
+      setPreferences(user.preferences || {
+        measurementUnits: 'imperial' as const,
+        dietaryRestrictions: [],
+        preferredCookingMethods: [],
+        skillLevel: 'intermediate' as const,
+        preferredIngredients: [],
+        dislikedIngredients: [],
+        commonSubstitutions: {}
+      })
     }
   }, [user])
 
