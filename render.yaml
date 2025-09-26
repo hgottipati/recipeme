@@ -4,7 +4,7 @@
 npm install
 
 # Start Command  
-cd backend && npm start
+npm start
 
 # Environment Variables (set these in Render dashboard)
 # MONGODB_URI=mongodb+srv://...

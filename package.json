@@ -2,7 +2,7 @@
   "name": "recipe-ai",
   "version": "1.0.0",
   "description": "AI-powered recipe app that standardizes and personalizes recipes",
-  "main": "index.js",
+  "main": "backend/src/index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "cd frontend && npm run dev",
