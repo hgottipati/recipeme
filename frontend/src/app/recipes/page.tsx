@@ -264,7 +264,9 @@ export default function RecipesPage() {
                       <div className="flex items-center space-x-1 text-gray-500">
                         {getSourceIcon(recipe.source)}
                         {recipe.aiProcessing.isProcessed && (
-                          <Sparkles className="h-4 w-4 text-primary-500" title="AI Processed" />
+                          <span title="AI Processed">
+                            <Sparkles className="h-4 w-4 text-primary-500" />
+                          </span>
                         )}
                       </div>
                     </div>
