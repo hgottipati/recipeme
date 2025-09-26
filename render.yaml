@@ -1,0 +1,17 @@
+# Render deployment configuration for RecipeAI Backend
+
+# Build Command
+npm install
+
+# Start Command  
+cd backend && npm start
+
+# Environment Variables (set these in Render dashboard)
+# MONGODB_URI=mongodb+srv://...
+# JWT_SECRET=your-jwt-secret
+# SESSION_SECRET=your-session-secret
+# GOOGLE_CLIENT_ID=your-google-client-id
+# GOOGLE_CLIENT_SECRET=your-google-client-secret
+# GOOGLE_CALLBACK_URL=https://your-app.onrender.com/api/auth/google/callback
+# FRONTEND_URL=https://your-frontend-url.com
+# OPENAI_API_KEY=your-openai-key
