@@ -1,7 +1,7 @@
 # Render deployment configuration for RecipeAI Backend
 
 # Build Command
-npm install
+npm install && cd backend && npm install
 
 # Start Command  
 npm start
