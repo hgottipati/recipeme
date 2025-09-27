@@ -2,13 +2,19 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
-import dynamic from 'next/dynamic'
 
-// Dynamically import AuthProvider to prevent SSR issues
-const AuthProvider = dynamic(() => import('@/contexts/AuthContext').then(mod => ({ default: mod.AuthProvider })), {
-  ssr: false,
-  loading: () => null
-})
+// Force dynamic rendering for the entire app
+export const dynamic = 'force-dynamic'
+
+// Simple AuthProvider wrapper that only renders on client
+function ClientOnlyAuthProvider({ children }: { children: React.ReactNode }) {
+  if (typeof window === 'undefined') {
+    return <>{children}</>
+  }
+  
+  const { AuthProvider } = require('@/contexts/AuthContext')
+  return <AuthProvider>{children}</AuthProvider>
+}
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -32,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
+        <ClientOnlyAuthProvider>
           {children}
           <Toaster 
             position="top-right"
@@ -58,7 +64,7 @@ export default function RootLayout({
               },
             }}
           />
-        </AuthProvider>
+        </ClientOnlyAuthProvider>
       </body>
     </html>
   )
