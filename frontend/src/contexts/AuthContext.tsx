@@ -84,6 +84,15 @@ const AuthProviderInner: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // During SSR, provide the default context
+  if (typeof window === 'undefined') {
+    return (
+      <AuthContext.Provider value={defaultContext}>
+        {children}
+      </AuthContext.Provider>
+    )
+  }
+
   useEffect(() => {
     // Check for stored token on app load
     const storedToken = localStorage.getItem('token')
@@ -215,15 +224,5 @@ const AuthProviderInner: React.FC<AuthProviderProps> = ({ children }) => {
 
 // AuthProvider that handles SSR properly
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  // During SSR, provide the default context
-  if (typeof window === 'undefined') {
-    return (
-      <AuthContext.Provider value={defaultContext}>
-        {children}
-      </AuthContext.Provider>
-    )
-  }
-  
-  // On client side, use the full provider
   return <AuthProviderInner>{children}</AuthProviderInner>
 }
