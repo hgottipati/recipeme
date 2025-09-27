@@ -12,14 +12,14 @@ import {
   Save,
   Clock,
   Users,
-  Sparkles,
-  LogOut
+  Sparkles
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import UserDropdown from '@/components/UserDropdown'
 import toast from 'react-hot-toast'
 
 export default function ProfilePage() {
-  const { user, updatePreferences, addEquipment, removeEquipment, logout } = useAuth()
+  const { user, updatePreferences, addEquipment, removeEquipment } = useAuth()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'preferences' | 'equipment'>('preferences')
   const [preferences, setPreferences] = useState(user?.preferences || {
@@ -93,11 +93,6 @@ export default function ProfilePage() {
     }
   }
 
-  const handleLogout = () => {
-    logout()
-    toast.success('Logged out successfully!')
-    router.push('/')
-  }
 
   if (!user) {
     return (
@@ -138,13 +133,7 @@ export default function ProfilePage() {
                 )}
               </div>
             </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-            >
-              <LogOut className="h-4 w-4" />
-              <span>Logout</span>
-            </button>
+            <UserDropdown />
           </div>
         </div>
       </div>

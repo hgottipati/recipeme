@@ -18,6 +18,7 @@ import {
 import Link from 'next/link'
 import { recipeApi } from '@/lib/api'
 import toast from 'react-hot-toast'
+import UserDropdown from '@/components/UserDropdown'
 
 interface Recipe {
   _id: string
@@ -96,10 +97,8 @@ export default function HomePage() {
               <h1 className="text-2xl font-bold text-gradient">Recipe AI</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-600">Welcome, {user.name}</span>
-              <Link href="/profile" className="btn-outline">
-                Profile
-              </Link>
+              <span className="text-gray-600 hidden sm:block">Welcome, {user.name}</span>
+              <UserDropdown />
             </div>
           </div>
         </div>
