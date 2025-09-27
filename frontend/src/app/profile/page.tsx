@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
 import { useRouter } from 'next/navigation'
 import { 
   User, 

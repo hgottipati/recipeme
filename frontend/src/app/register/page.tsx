@@ -3,6 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
 import { motion } from 'framer-motion'
 import { ChefHat, Mail, Lock, Eye, EyeOff, User } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'

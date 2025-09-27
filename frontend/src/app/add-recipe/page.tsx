@@ -3,6 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
 import { 
   Globe, 
   Video, 

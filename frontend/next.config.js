@@ -13,12 +13,10 @@ const nextConfig = {
     }
     return config
   },
-  // Force all pages to be client-side rendered
+  // Force all pages to be dynamic
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
-  // Disable static optimization
-  generateStaticParams: false,
 }
 
 module.exports = nextConfig

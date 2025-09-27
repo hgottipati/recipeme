@@ -2,6 +2,9 @@
 
 import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
 import { useAuth } from '@/contexts/AuthContext'
 import toast from 'react-hot-toast'
 
