@@ -28,6 +28,8 @@ const nextConfig = {
   generateBuildId: async () => {
     return 'build-' + Date.now()
   },
+  // Skip static generation entirely
+  skipTrailingSlashRedirect: true,
 }
 
 module.exports = nextConfig
