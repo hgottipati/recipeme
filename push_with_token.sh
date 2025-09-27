@@ -23,7 +23,7 @@ else
     exit 1
 fi
 
-if git push https://hgottipati:$TOKEN@github.com/hgottipati/recipeme.git main; then
+if git push https://hgottipati:$TOKEN@github.com/hgottipati/recipeme.git; then
     echo "✅ Successfully pushed to GitHub!"
 else
     echo "❌ Push failed. Please check your connection and try again."
