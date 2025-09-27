@@ -32,6 +32,8 @@ const nextConfig = {
   skipTrailingSlashRedirect: true,
   // Disable static optimization
   swcMinify: true,
+  // Disable static optimization
+  staticPageGenerationTimeout: 0,
 }
 
 module.exports = nextConfig
