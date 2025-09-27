@@ -55,6 +55,22 @@ app.use('/api/users', userRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/auth', authRoutes);
 
+// API root endpoint
+app.get('/api', (req, res) => {
+  res.json({ 
+    message: 'RecipeAI API is running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      users: '/api/users',
+      recipes: '/api/recipes',
+      ai: '/api/ai',
+      auth: '/api/auth'
+    },
+    timestamp: new Date().toISOString() 
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
