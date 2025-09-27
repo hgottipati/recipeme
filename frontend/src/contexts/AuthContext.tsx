@@ -118,7 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('token', newToken)
       api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
     } catch (error: any) {
-      throw new Error(error.response?.data?.error || 'Login failed')
+      throw new Error(error.response?.data?.error || 'Login failed, please try again')
     }
   }
 
@@ -132,7 +132,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('token', newToken)
       api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
     } catch (error: any) {
-      throw new Error(error.response?.data?.error || 'Registration failed')
+      throw new Error(error.response?.data?.error || 'Registration failed, please try again')
     }
   }
 
