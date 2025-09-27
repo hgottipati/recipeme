@@ -284,7 +284,7 @@ Instructions:
                        'Analyzing recipe text, structuring ingredients and instructions...'}
                     </p>
                     <div className="mt-2 text-xs text-blue-600">
-                      This may take 10-30 seconds depending on content complexity.
+                      This may take 1-2 minutes depending on content complexity. Please be patient!
                     </div>
                   </div>
                 </div>

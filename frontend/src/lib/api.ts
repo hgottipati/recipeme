@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://recipeme-vcc9.onrend
 
 export const api = axios.create({
   baseURL: API_URL,
-  timeout: 30000,
+  timeout: 120000, // 2 minutes for AI processing
   headers: {
     'Content-Type': 'application/json',
   },
