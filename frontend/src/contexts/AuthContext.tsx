@@ -55,6 +55,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (context === undefined) {
+    // Return a default context during SSR
+    if (typeof window === 'undefined') {
+      return {
+        user: null,
+        token: null,
+        login: async () => {},
+        register: async () => {},
+        handleOAuthLogin: async () => {},
+        logout: () => {},
+        updatePreferences: async () => {},
+        addEquipment: async () => {},
+        removeEquipment: async () => {},
+        loading: true
+      }
+    }
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
@@ -70,15 +85,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check for stored token on app load
-    const storedToken = localStorage.getItem('token')
-    if (storedToken) {
-      setToken(storedToken)
-      api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`
-      // Fetch user profile
-      fetchUserProfile()
-    } else {
-      setLoading(false)
+    // Only run on client side
+    if (typeof window !== 'undefined') {
+      // Check for stored token on app load
+      const storedToken = localStorage.getItem('token')
+      if (storedToken) {
+        setToken(storedToken)
+        api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`
+        // Fetch user profile
+        fetchUserProfile()
+      } else {
+        setLoading(false)
+      }
     }
   }, [])
 
@@ -100,7 +118,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Failed to fetch user profile:', error)
       // Token might be invalid, clear it
-      localStorage.removeItem('token')
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token')
+      }
       setToken(null)
       api.defaults.headers.common['Authorization'] = ''
     } finally {
@@ -115,7 +135,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       setToken(newToken)
       setUser(userData)
-      localStorage.setItem('token', newToken)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', newToken)
+      }
       api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
     } catch (error: any) {
       throw new Error(error.response?.data?.error || 'Login failed, please try again')
@@ -129,7 +151,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       setToken(newToken)
       setUser(userData)
-      localStorage.setItem('token', newToken)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', newToken)
+      }
       api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
     } catch (error: any) {
       throw new Error(error.response?.data?.error || 'Registration failed, please try again')
@@ -139,7 +163,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setUser(null)
     setToken(null)
-    localStorage.removeItem('token')
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token')
+    }
     api.defaults.headers.common['Authorization'] = ''
   }
 
