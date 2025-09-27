@@ -70,6 +70,7 @@ export const useAuth = () => {
         removeEquipment: async () => {},
         loading: true
       }
+
     }
     throw new Error('useAuth must be used within an AuthProvider')
   }
