@@ -83,7 +83,17 @@ export default function AddRecipePage() {
       }
     } catch (error: any) {
       console.error('Recipe creation error:', error)
-      toast.error(error.response?.data?.error || 'Failed to create recipe')
+      
+      // Check if it's an authentication error
+      if (error.response?.status === 401) {
+        toast.error('Authentication expired. Please log in again.')
+        router.push('/login')
+      } else if (error.response?.status === 500) {
+        toast.error('Server error. Recipe may have been created - please check your recipes list.')
+        router.push('/recipes')
+      } else {
+        toast.error(error.response?.data?.error || 'Failed to create recipe')
+      }
     } finally {
       setLoading(false)
     }

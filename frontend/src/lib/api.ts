@@ -29,9 +29,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid
+      // Token expired or invalid - clear token but let components handle redirect
       localStorage.removeItem('token')
-      window.location.href = '/login'
+      // Don't automatically redirect - let individual components handle this
     }
     return Promise.reject(error)
   }
