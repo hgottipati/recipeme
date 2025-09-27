@@ -25,7 +25,7 @@ app.use(cors({
     process.env.FRONTEND_URL || 'http://localhost:3000',
     'http://localhost:3001',
     'https://recipeme-ai.vercel.app',
-    /^https:\/\/recipeme-ai.*\.vercel\.app$/ // Allow all Vercel preview URLs
+    /^https:\/\/recipeme-.*\.vercel\.app$/ // Allow all Vercel preview URLs
   ],
   credentials: true
 }));
