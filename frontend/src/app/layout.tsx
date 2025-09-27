@@ -1,14 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import dynamic from 'next/dynamic'
 import { Toaster } from 'react-hot-toast'
-
-// Dynamically import AuthProvider to prevent SSR issues
-const AuthProvider = dynamic(() => import('@/contexts/AuthContext').then(mod => ({ default: mod.AuthProvider })), {
-  ssr: false,
-  loading: () => <div>Loading...</div>
-})
+import { AuthProvider } from '@/contexts/AuthContext'
 
 const inter = Inter({ subsets: ['latin'] })
 

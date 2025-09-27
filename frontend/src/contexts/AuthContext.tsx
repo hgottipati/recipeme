@@ -53,24 +53,26 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+// Default context for SSR
+const defaultContext: AuthContextType = {
+  user: null,
+  token: null,
+  login: async () => {},
+  register: async () => {},
+  handleOAuthLogin: async () => {},
+  logout: () => {},
+  updatePreferences: async () => {},
+  addEquipment: async () => {},
+  removeEquipment: async () => {},
+  loading: true
+}
+
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (context === undefined) {
     // Return a default context during SSR
     if (typeof window === 'undefined') {
-      return {
-        user: null,
-        token: null,
-        login: async () => {},
-        register: async () => {},
-        handleOAuthLogin: async () => {},
-        logout: () => {},
-        updatePreferences: async () => {},
-        addEquipment: async () => {},
-        removeEquipment: async () => {},
-        loading: true
-      }
-
+      return defaultContext
     }
     throw new Error('useAuth must be used within an AuthProvider')
   }
@@ -224,8 +226,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [])
 
   if (!mounted) {
-    // Return a loading state during SSR
-    return <div>{children}</div>
+    // Return default context during SSR
+    return (
+      <AuthContext.Provider value={defaultContext}>
+        {children}
+      </AuthContext.Provider>
+    )
   }
 
   return <AuthProviderInner>{children}</AuthProviderInner>
