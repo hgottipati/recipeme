@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { api } from '@/lib/api'
+import dynamic from 'next/dynamic'
 
 interface User {
   id: string
@@ -79,24 +80,21 @@ interface AuthProviderProps {
   children: ReactNode
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+const AuthProviderInner: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [token, setToken] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Only run on client side
-    if (typeof window !== 'undefined') {
-      // Check for stored token on app load
-      const storedToken = localStorage.getItem('token')
-      if (storedToken) {
-        setToken(storedToken)
-        api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`
-        // Fetch user profile
-        fetchUserProfile()
-      } else {
-        setLoading(false)
-      }
+    // Check for stored token on app load
+    const storedToken = localStorage.getItem('token')
+    if (storedToken) {
+      setToken(storedToken)
+      api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`
+      // Fetch user profile
+      fetchUserProfile()
+    } else {
+      setLoading(false)
     }
   }, [])
 
@@ -214,4 +212,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       {children}
     </AuthContext.Provider>
   )
+}
+
+// Client-only wrapper to prevent SSR issues
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    // Return a loading state during SSR
+    return <div>{children}</div>
+  }
+
+  return <AuthProviderInner>{children}</AuthProviderInner>
 }
