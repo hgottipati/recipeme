@@ -237,3 +237,4 @@ If you encounter any issues or have questions:
 ---
 
 **Built with ❤️ by the Recipe AI Team**
+# Vercel deployment trigger
