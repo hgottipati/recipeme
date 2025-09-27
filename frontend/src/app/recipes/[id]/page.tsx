@@ -20,6 +20,7 @@ import Link from 'next/link'
 import { recipeApi, userApi } from '@/lib/api'
 import { useAuth } from '@/contexts/AuthContext'
 import toast from 'react-hot-toast'
+import UserDropdown from '@/components/UserDropdown'
 
 interface Recipe {
   _id: string
@@ -198,6 +199,7 @@ export default function RecipePage() {
               >
                 <Trash2 className="h-5 w-5" />
               </button>
+              <UserDropdown />
             </div>
           </div>
         </div>

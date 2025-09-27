@@ -16,6 +16,7 @@ import {
 import Link from 'next/link'
 import { recipeApi } from '@/lib/api'
 import toast from 'react-hot-toast'
+import UserDropdown from '@/components/UserDropdown'
 
 type RecipeSource = 'url' | 'youtube' | 'custom'
 
@@ -131,11 +132,14 @@ export default function AddRecipePage() {
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center py-4">
-            <Link href="/" className="mr-4">
-              <ArrowLeft className="h-6 w-6 text-gray-600 hover:text-gray-900" />
-            </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Add New Recipe</h1>
+          <div className="flex items-center justify-between py-4">
+            <div className="flex items-center">
+              <Link href="/recipes" className="mr-4">
+                <ArrowLeft className="h-6 w-6 text-gray-600 hover:text-gray-900" />
+              </Link>
+              <h1 className="text-2xl font-bold text-gray-900">Add New Recipe</h1>
+            </div>
+            <UserDropdown />
           </div>
         </div>
       </header>

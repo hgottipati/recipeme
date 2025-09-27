@@ -56,22 +56,20 @@ export default function UserDropdown({ className = '' }: UserDropdownProps) {
       {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-3 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+        className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
       >
-        <div className="flex items-center space-x-2">
-          <div className="bg-primary-100 rounded-full p-1">
-            {user.avatar ? (
-              <img 
-                src={user.avatar} 
-                alt={user.name}
-                className="h-6 w-6 rounded-full object-cover"
-              />
-            ) : (
-              <User className="h-6 w-6 text-primary-600" />
-            )}
-          </div>
-          <span className="hidden sm:block">{user.name}</span>
+        <div className="bg-primary-100 rounded-full p-1">
+          {user.avatar ? (
+            <img 
+              src={user.avatar} 
+              alt={user.name}
+              className="h-6 w-6 rounded-full object-cover"
+            />
+          ) : (
+            <User className="h-6 w-6 text-primary-600" />
+          )}
         </div>
+        <span className="hidden sm:block">Profile</span>
         <ChevronDown 
           className={`h-4 w-4 text-gray-500 transition-transform ${
             isOpen ? 'rotate-180' : ''
@@ -103,7 +101,7 @@ export default function UserDropdown({ className = '' }: UserDropdownProps) {
             {/* Menu Items */}
             <div className="py-1">
               <button
-                onClick={() => handleNavigation('/profile')}
+                onClick={() => handleNavigation('/')}
                 className="flex items-center space-x-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <User className="h-4 w-4 text-gray-500" />
