@@ -14,9 +14,9 @@ export default function AuthCallbackPage() {
   const { handleOAuthLogin } = useAuth()
 
   useEffect(() => {
-    const token = searchParams.get('token')
-    const success = searchParams.get('success')
-    const error = searchParams.get('error')
+    const token = searchParams?.get('token')
+    const success = searchParams?.get('success')
+    const error = searchParams?.get('error')
 
     const handleAuthCallback = async () => {
       if (success === 'true' && token) {

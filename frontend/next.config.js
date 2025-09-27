@@ -30,6 +30,8 @@ const nextConfig = {
   },
   // Skip static generation entirely
   skipTrailingSlashRedirect: true,
+  // Disable static optimization
+  swcMinify: true,
 }
 
 module.exports = nextConfig

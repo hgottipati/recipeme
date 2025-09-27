@@ -83,10 +83,10 @@ export default function RecipePage() {
   const [shareUrl, setShareUrl] = useState('')
 
   useEffect(() => {
-    if (params.id) {
+    if (params?.id) {
       fetchRecipe(params.id as string)
     }
-  }, [params.id])
+  }, [params?.id])
 
   const fetchRecipe = async (id: string) => {
     try {
