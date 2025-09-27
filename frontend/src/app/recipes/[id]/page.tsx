@@ -62,6 +62,7 @@ interface Recipe {
     standardizationApplied: string[]
     personalizationApplied: string[]
     confidenceScore: number
+    errors?: string[]
   }
   images: Array<{ url: string; caption?: string; isPrimary: boolean }>
   createdAt: string
