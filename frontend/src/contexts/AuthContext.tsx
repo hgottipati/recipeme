@@ -70,10 +70,6 @@ const defaultContext: AuthContextType = {
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (context === undefined) {
-    // Return a default context during SSR
-    if (typeof window === 'undefined') {
-      return defaultContext
-    }
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
@@ -217,7 +213,17 @@ const AuthProviderInner: React.FC<AuthProviderProps> = ({ children }) => {
   )
 }
 
-// Simplified AuthProvider - only runs on client side
+// AuthProvider that handles SSR properly
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  // During SSR, provide the default context
+  if (typeof window === 'undefined') {
+    return (
+      <AuthContext.Provider value={defaultContext}>
+        {children}
+      </AuthContext.Provider>
+    )
+  }
+  
+  // On client side, use the full provider
   return <AuthProviderInner>{children}</AuthProviderInner>
 }

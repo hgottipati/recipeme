@@ -14,9 +14,6 @@ const nextConfig = {
     return config
   },
   // Force all pages to be dynamic
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
 }
 
 module.exports = nextConfig

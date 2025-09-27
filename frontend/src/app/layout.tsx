@@ -2,13 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
-import dynamic from 'next/dynamic'
-
-// Dynamically import AuthProvider to prevent SSR issues
-const AuthProvider = dynamic(() => import('@/contexts/AuthContext').then(mod => ({ default: mod.AuthProvider })), {
-  ssr: false,
-  loading: () => null
-})
+import { AuthProvider } from '@/contexts/AuthContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +11,11 @@ export const metadata: Metadata = {
   description: 'AI-powered recipe app that standardizes and personalizes recipes from any source',
   keywords: ['recipe', 'ai', 'cooking', 'food', 'meal planning'],
   authors: [{ name: 'Recipe AI Team' }],
-  viewport: 'width=device-width, initial-scale=1',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({
