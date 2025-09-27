@@ -346,35 +346,57 @@ export default function RecipePage() {
         </div>
 
         {/* AI Processing Info */}
-        {recipe.aiProcessing.isProcessed && (
+        {(recipe.aiProcessing.isProcessed || (recipe.aiProcessing.errors && recipe.aiProcessing.errors.length > 0)) && (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="card mt-8"
+            className={`card mt-8 ${recipe.aiProcessing.errors && recipe.aiProcessing.errors.length > 0 ? 'border-yellow-200 bg-yellow-50' : ''}`}
           >
             <div className="flex items-start space-x-3">
-              <Sparkles className="h-6 w-6 text-primary-600 mt-1" />
+              <Sparkles className={`h-6 w-6 mt-1 ${recipe.aiProcessing.errors && recipe.aiProcessing.errors.length > 0 ? 'text-yellow-600' : 'text-primary-600'}`} />
               <div className="flex-1">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">AI Processing Details</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-600">Original Format:</p>
-                    <p className="font-medium capitalize">{recipe.aiProcessing.originalFormat}</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {recipe.aiProcessing.errors && recipe.aiProcessing.errors.length > 0 ? 'AI Processing Issues' : 'AI Processing Details'}
+                </h3>
+                
+                {recipe.aiProcessing.errors && recipe.aiProcessing.errors.length > 0 ? (
+                  <div className="space-y-3">
+                    <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-3">
+                      <p className="text-yellow-800 text-sm">
+                        <strong>Note:</strong> This recipe was imported successfully, but AI processing encountered some issues. 
+                        The recipe content may not be fully structured or personalized.
+                      </p>
+                    </div>
+                    <div className="text-sm">
+                      <p className="text-gray-600 mb-2">Issues encountered:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        {recipe.aiProcessing.errors.map((error, index) => (
+                          <li key={index} className="text-gray-700">{error}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-600">Confidence Score:</p>
-                    <p className="font-medium">{(recipe.aiProcessing.confidenceScore * 100).toFixed(0)}%</p>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-600">Original Format:</p>
+                      <p className="font-medium capitalize">{recipe.aiProcessing.originalFormat}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600">Confidence Score:</p>
+                      <p className="font-medium">{(recipe.aiProcessing.confidenceScore * 100).toFixed(0)}%</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600">Standardization Applied:</p>
+                      <p className="font-medium">{recipe.aiProcessing.standardizationApplied.join(', ')}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600">Personalization Applied:</p>
+                      <p className="font-medium">{recipe.aiProcessing.personalizationApplied.join(', ')}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-600">Standardization Applied:</p>
-                    <p className="font-medium">{recipe.aiProcessing.standardizationApplied.join(', ')}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Personalization Applied:</p>
-                    <p className="font-medium">{recipe.aiProcessing.personalizationApplied.join(', ')}</p>
-                  </div>
-                </div>
+                )}
                 {recipe.source.url && (
                   <div className="mt-4">
                     <a 

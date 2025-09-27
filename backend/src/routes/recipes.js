@@ -84,43 +84,90 @@ router.post('/from-url', auth, async (req, res) => {
     // Get user preferences
     const user = await User.findById(req.user.id);
     
-    // Parse recipe with AI
-    const parsedRecipe = await aiService.parseRecipeFromText(rawText, user.preferences);
-    
-    // Standardize recipe
-    const standardizedRecipe = await aiService.standardizeRecipe(parsedRecipe, user.preferences);
-    
-    // Personalize instructions
-    const personalizedRecipe = await aiService.personalizeInstructions(
-      standardizedRecipe, 
-      user.preferences, 
-      user.equipment
-    );
+    let recipeData;
+    let aiProcessingStatus = {
+      isProcessed: false,
+      processedAt: null,
+      originalFormat: 'url',
+      standardizationApplied: [],
+      personalizationApplied: [],
+      confidenceScore: 0,
+      errors: []
+    };
 
-    // Create recipe document
-    const recipe = new Recipe({
-      ...personalizedRecipe,
-      source: {
-        type: 'url',
-        url: url,
-        originalText: rawText
-      },
-      aiProcessing: {
+    try {
+      // Parse recipe with AI
+      const parsedRecipe = await aiService.parseRecipeFromText(rawText, user.preferences);
+      
+      // Standardize recipe
+      const standardizedRecipe = await aiService.standardizeRecipe(parsedRecipe, user.preferences);
+      
+      // Personalize instructions
+      const personalizedRecipe = await aiService.personalizeInstructions(
+        standardizedRecipe, 
+        user.preferences, 
+        user.equipment
+      );
+
+      recipeData = personalizedRecipe;
+      aiProcessingStatus = {
         isProcessed: true,
         processedAt: new Date(),
         originalFormat: 'url',
         standardizationApplied: ['units', 'equipment', 'terminology'],
         personalizationApplied: ['instructions', 'equipment', 'skill-level'],
-        confidenceScore: 0.9
+        confidenceScore: 0.9,
+        errors: []
+      };
+    } catch (aiError) {
+      console.error('AI processing error:', aiError);
+      
+      // Create a basic recipe from the raw text if AI fails
+      recipeData = {
+        title: 'Recipe from URL',
+        description: 'Recipe imported from URL (AI processing failed)',
+        ingredients: [],
+        instructions: [
+          {
+            stepNumber: 1,
+            instruction: 'Original recipe text: ' + rawText.substring(0, 500) + '...',
+            originalText: rawText.substring(0, 500) + '...'
+          }
+        ],
+        metadata: {
+          prepTime: 'Unknown',
+          cookTime: 'Unknown',
+          totalTime: 'Unknown',
+          servings: 'Unknown',
+          difficulty: 'Unknown',
+          cuisine: [],
+          tags: [],
+          mealType: []
+        }
+      };
+      
+      aiProcessingStatus.errors.push(aiError.message);
+    }
+
+    // Create recipe document
+    const recipe = new Recipe({
+      ...recipeData,
+      source: {
+        type: 'url',
+        url: url,
+        originalText: rawText
       },
+      aiProcessing: aiProcessingStatus,
       user: req.user.id
     });
 
     await recipe.save();
 
-    // Update user's AI learning data
-    user.aiLearningData.totalRecipesParsed += 1;
-    await user.save();
+    // Update user's AI learning data only if AI processing succeeded
+    if (aiProcessingStatus.isProcessed) {
+      user.aiLearningData.totalRecipesParsed += 1;
+      await user.save();
+    }
 
     res.status(201).json(recipe);
   } catch (error) {

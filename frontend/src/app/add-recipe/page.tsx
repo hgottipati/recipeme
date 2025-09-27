@@ -68,7 +68,14 @@ export default function AddRecipePage() {
       }
 
       if (response && response.data && response.data._id) {
-        toast.success('Recipe created successfully!')
+        // Check if AI processing failed
+        if (response.data.aiProcessing && response.data.aiProcessing.errors && response.data.aiProcessing.errors.length > 0) {
+          toast.success('Recipe imported successfully! (Note: AI processing had some issues, but the recipe was saved)', {
+            duration: 5000
+          })
+        } else {
+          toast.success('Recipe created successfully!')
+        }
         router.push(`/recipes/${response.data._id}`)
       } else {
         toast.error('Recipe was created but could not redirect. Please check your recipes list.')
