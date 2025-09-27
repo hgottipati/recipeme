@@ -217,22 +217,7 @@ const AuthProviderInner: React.FC<AuthProviderProps> = ({ children }) => {
   )
 }
 
-// Client-only wrapper to prevent SSR issues
+// Simplified AuthProvider - only runs on client side
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    // Return default context during SSR
-    return (
-      <AuthContext.Provider value={defaultContext}>
-        {children}
-      </AuthContext.Provider>
-    )
-  }
-
   return <AuthProviderInner>{children}</AuthProviderInner>
 }

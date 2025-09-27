@@ -13,10 +13,12 @@ const nextConfig = {
     }
     return config
   },
-  // Disable static generation for all pages to prevent SSR issues
+  // Force all pages to be client-side rendered
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
+  // Disable static optimization
+  generateStaticParams: false,
 }
 
 module.exports = nextConfig
