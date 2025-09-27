@@ -42,6 +42,7 @@ export default function AddRecipePage() {
         case 'url':
           if (!formData.url) {
             toast.error('Please enter a URL')
+            setLoading(false)
             return
           }
           response = await recipeApi.createFromUrl(formData.url)
@@ -50,6 +51,7 @@ export default function AddRecipePage() {
         case 'youtube':
           if (!formData.videoId) {
             toast.error('Please enter a YouTube video ID')
+            setLoading(false)
             return
           }
           response = await recipeApi.createFromYouTube(formData.videoId)
@@ -58,15 +60,22 @@ export default function AddRecipePage() {
         case 'custom':
           if (!formData.rawText) {
             toast.error('Please enter recipe text')
+            setLoading(false)
             return
           }
           response = await recipeApi.createCustom(formData.rawText, formData.title)
           break
       }
 
-      toast.success('Recipe created successfully!')
-      router.push(`/recipes/${response.data._id}`)
+      if (response && response.data && response.data._id) {
+        toast.success('Recipe created successfully!')
+        router.push(`/recipes/${response.data._id}`)
+      } else {
+        toast.error('Recipe was created but could not redirect. Please check your recipes list.')
+        router.push('/recipes')
+      }
     } catch (error: any) {
+      console.error('Recipe creation error:', error)
       toast.error(error.response?.data?.error || 'Failed to create recipe')
     } finally {
       setLoading(false)
@@ -246,18 +255,37 @@ Instructions:
             )}
 
             {/* AI Processing Info */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 mr-3" />
-                <div>
-                  <h3 className="text-sm font-medium text-blue-900">AI Processing</h3>
-                  <p className="text-sm text-blue-700 mt-1">
-                    Our AI will automatically extract ingredients, instructions, and metadata from your input, 
-                    then personalize it based on your preferences and equipment.
-                  </p>
+            {loading ? (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start">
+                  <Loader2 className="h-5 w-5 text-blue-600 mt-0.5 mr-3 animate-spin" />
+                  <div>
+                    <h3 className="text-sm font-medium text-blue-900">AI Processing Recipe...</h3>
+                    <p className="text-sm text-blue-700 mt-1">
+                      {activeTab === 'url' ? 'Extracting content from URL, parsing ingredients and instructions...' :
+                       activeTab === 'youtube' ? 'Processing YouTube video transcript, analyzing recipe content...' :
+                       'Analyzing recipe text, structuring ingredients and instructions...'}
+                    </p>
+                    <div className="mt-2 text-xs text-blue-600">
+                      This may take 10-30 seconds depending on content complexity.
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 mr-3" />
+                  <div>
+                    <h3 className="text-sm font-medium text-blue-900">AI Processing</h3>
+                    <p className="text-sm text-blue-700 mt-1">
+                      Our AI will automatically extract ingredients, instructions, and metadata from your input, 
+                      then personalize it based on your preferences and equipment.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Submit Button */}
             <div className="flex justify-end">
@@ -269,7 +297,11 @@ Instructions:
                 {loading ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    <span>Processing...</span>
+                    <span>
+                      {activeTab === 'url' ? 'Extracting from URL...' :
+                       activeTab === 'youtube' ? 'Processing YouTube video...' :
+                       'Processing recipe...'}
+                    </span>
                   </>
                 ) : (
                   <>
